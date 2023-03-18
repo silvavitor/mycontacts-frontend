@@ -47,6 +47,7 @@ export default function ContactForm({ buttonLabel }) {
 
   return (
     <Form onSubmit={handleSubmit}>
+      {/* Nome */}
       <FormGroup error={getErrorMessageByFieldName('name')}>
         <Input
           error={getErrorMessageByFieldName('name')}
@@ -56,6 +57,7 @@ export default function ContactForm({ buttonLabel }) {
         />
       </FormGroup>
 
+      {/* Email */}
       <FormGroup error={getErrorMessageByFieldName('email')}>
         <Input
           error={getErrorMessageByFieldName('email')}
@@ -65,6 +67,7 @@ export default function ContactForm({ buttonLabel }) {
         />
       </FormGroup>
 
+      {/* Telefone */}
       <FormGroup>
         <Input
           placeholder="Telefone"
@@ -73,6 +76,7 @@ export default function ContactForm({ buttonLabel }) {
         />
       </FormGroup>
 
+      {/* Categoria */}
       <FormGroup>
         <Select
           value={category}
