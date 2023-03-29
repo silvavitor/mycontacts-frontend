@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import {
-  Container, InputSearchContainer, Header, ListContainer, Card,
+  Container, InputSearchContainer, Header, ListHeader, Card,
 } from './styles';
 
 import arrow from '../../assets/images/icons/arrow.svg';
@@ -37,36 +37,34 @@ export default function Home() {
         <Link to="/new">Novo contato</Link>
       </Header>
 
-      <ListContainer>
-        <header>
-          <button type="button" className="sort-button">
-            <span>Nome</span>
-            <img src={arrow} alt="Arrow" />
-          </button>
-        </header>
+      <ListHeader>
+        <button type="button" className="sort-button">
+          <span>Nome</span>
+          <img src={arrow} alt="Arrow" />
+        </button>
+      </ListHeader>
 
-        {contacts.map((contact) => (
-          <Card key={contact.id}>
-            <div className="info">
-              <div className="contact-title">
-                <strong>{contact.name}</strong>
-                {contact.category_name && (<small>{contact.category_name}</small>)}
-              </div>
-              <span>{contact.email}</span>
-              <span>{contact.phone}</span>
+      {contacts.map((contact) => (
+        <Card key={contact.id}>
+          <div className="info">
+            <div className="contact-title">
+              <strong>{contact.name}</strong>
+              {contact.category_name && (<small>{contact.category_name}</small>)}
             </div>
+            <span>{contact.email}</span>
+            <span>{contact.phone}</span>
+          </div>
 
-            <div className="actions">
-              <Link to={`edit/${contact.id}`}>
-                <img src={edit} alt="Edit" />
-              </Link>
-              <button type="button">
-                <img src={trash} alt="Trash" />
-              </button>
-            </div>
-          </Card>
-        ))}
-      </ListContainer>
+          <div className="actions">
+            <Link to={`edit/${contact.id}`}>
+              <img src={edit} alt="Edit" />
+            </Link>
+            <button type="button">
+              <img src={trash} alt="Trash" />
+            </button>
+          </div>
+        </Card>
+      ))}
     </Container>
   );
 }
