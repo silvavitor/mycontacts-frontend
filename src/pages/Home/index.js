@@ -11,6 +11,11 @@ import trash from '../../assets/images/icons/trash.svg';
 export default function Home() {
   const [contacts, setContacts] = useState([]);
   const [orderBy, setOrderBy] = useState('asc');
+  const [searchTerm, setSearchTerm] = useState('');
+
+  const fileredContacts = contacts.filter((contact) => (
+    contact.name.toLowerCase().includes(searchTerm.toLowerCase())
+  ));
 
   useEffect(() => {
     fetch(`http://localhost:3132/contacts?orderBy=${orderBy}`)
@@ -27,17 +32,26 @@ export default function Home() {
     setOrderBy((prevState) => (prevState === 'asc' ? 'desc' : 'asc'));
   }
 
+  function handleChangeSearchTerm(event) {
+    setSearchTerm(event.target.value);
+  }
+
   return (
     <Container>
 
       <InputSearchContainer>
-        <input type="text" placeholder="Pesquise pelo nome..." />
+        <input
+          value={searchTerm}
+          type="text"
+          placeholder="Pesquise pelo nome..."
+          onChange={handleChangeSearchTerm}
+        />
       </InputSearchContainer>
 
       <Header>
         <strong>
-          {contacts.length}
-          {contacts.length === 1 ? ' contato' : ' contatos'}
+          {fileredContacts.length}
+          {fileredContacts.length === 1 ? ' contato' : ' contatos'}
         </strong>
         <Link to="/new">Novo contato</Link>
       </Header>
@@ -49,7 +63,7 @@ export default function Home() {
         </button>
       </ListHeader>
 
-      {contacts.map((contact) => (
+      {fileredContacts.map((contact) => (
         <Card key={contact.id}>
           <div className="info">
             <div className="contact-title">
