@@ -3,6 +3,7 @@ import { useEffect, useMemo, useState } from 'react';
 import {
   Container, InputSearchContainer, Header, ListHeader, Card,
 } from './styles';
+import Loader from '../../components/Loader';
 
 import arrow from '../../assets/images/icons/arrow.svg';
 import edit from '../../assets/images/icons/edit.svg';
@@ -12,12 +13,15 @@ export default function Home() {
   const [contacts, setContacts] = useState([]);
   const [orderBy, setOrderBy] = useState('asc');
   const [searchTerm, setSearchTerm] = useState('');
+  const [isLoading, setIsLoading] = useState(true);
 
   const fileredContacts = useMemo(() => contacts.filter((contact) => (
     contact.name.toLowerCase().includes(searchTerm.toLowerCase())
   )), [contacts, searchTerm]);
 
   useEffect(() => {
+    setIsLoading(true);
+
     fetch(`http://localhost:3132/contacts?orderBy=${orderBy}`)
       .then(async (response) => {
         const json = await response.json();
@@ -25,6 +29,9 @@ export default function Home() {
       })
       .catch((error) => {
         console.log('erro', error);
+      })
+      .finally(() => {
+        setIsLoading(false);
       });
   }, [orderBy]);
 
@@ -38,6 +45,8 @@ export default function Home() {
 
   return (
     <Container>
+
+      <Loader isLoading={isLoading} />
 
       <InputSearchContainer>
         <input
