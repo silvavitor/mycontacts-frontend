@@ -1,7 +1,12 @@
+import HttpClient from './utils/HttpClient';
+
 class ContactsService {
+  constructor() {
+    this.apiClient = new HttpClient('http://localhost:3132');
+  }
+
   async listContacts(orderBy = 'asc') {
-    const response = await fetch(`http://localhost:3132/contacts?orderBy=${orderBy}`);
-    return response.json();
+    return this.apiClient.get(`/contacts?orderBy=${orderBy}`);
   }
 }
 
