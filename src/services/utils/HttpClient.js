@@ -6,11 +6,19 @@ class HttpClient {
   async get(path) {
     const response = await fetch(this.baseUrl + path);
 
-    if (response.ok) {
-      return response.json();
+    let body = null;
+
+    const contentType = response.headers.get('Content-Type');
+
+    if (contentType.includes('application/json')) {
+      body = await response.json();
     }
 
-    throw new Error(`Status code not valid: ${response.status}`);
+    if (response.ok) {
+      return body;
+    }
+
+    throw new Error(body?.error || `${response.status} - ${response.statusText}`);
   }
 }
 
