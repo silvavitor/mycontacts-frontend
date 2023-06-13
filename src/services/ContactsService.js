@@ -16,6 +16,10 @@ class ContactsService {
   createContact(contact) {
     return this.apiClient.post('/contacts', { body: contact });
   }
+
+  updateContact(id, contact) {
+    return this.apiClient.put(`/contacts/${id}`, { body: contact });
+  }
 }
 
 export default new ContactsService();
