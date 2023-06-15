@@ -92,8 +92,6 @@ export default function Home() {
         (contact) => contact.id !== contactBeingDeleted.id,
       ));
 
-      handleCloseDeleteModal();
-
       toast({
         type: 'success',
         text: 'Contato deletedo com sucesso!',
@@ -105,6 +103,7 @@ export default function Home() {
       });
     } finally {
       setIsLoadingDelete(false);
+      handleCloseDeleteModal();
     }
   }
 
