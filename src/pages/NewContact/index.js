@@ -27,7 +27,7 @@ export default function NewContact() {
 
   return (
     <>
-      <PageHeader title="Novo Contato" />
+      <PageHeader title="Novo Contato" backPath="/" />
       <ContactForm
         ref={contactFormRef}
         buttonLabel="Cadastrar"

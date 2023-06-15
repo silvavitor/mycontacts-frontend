@@ -5,10 +5,10 @@ import { Container } from './styles';
 
 import arrow from '../../assets/images/icons/arrow.svg';
 
-export default function PageHeader({ title }) {
+export default function PageHeader({ title, backPath }) {
   return (
     <Container>
-      <Link to="/">
+      <Link to={backPath}>
         <img src={arrow} alt="Back" />
         <span>Voltar</span>
       </Link>
@@ -20,4 +20,5 @@ export default function PageHeader({ title }) {
 
 PageHeader.propTypes = {
   title: PropTypes.string.isRequired,
+  backPath: PropTypes.string.isRequired,
 };

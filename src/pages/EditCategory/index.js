@@ -1,58 +1,58 @@
 import { useParams, useHistory } from 'react-router-dom';
 import { useEffect, useState, useRef } from 'react';
 import PageHeader from '../../components/PageHeader';
-import ContactForm from '../../components/ContactForm';
-import ContactsService from '../../services/ContactsService';
+import CategoryForm from '../../components/CategoryForm';
+import CategoriesService from '../../services/CategoriesService';
 import Loader from '../../components/Loader';
 import toast from '../../utils/toast';
 import useSafeAsyncAction from '../../hooks/useSafeAsyncAction';
 
-export default function EditContact() {
+export default function EditCategory() {
   const [isLoading, setIsLoading] = useState(true);
-  const [contactName, setContactName] = useState('');
+  const [categoryName, setCategoryName] = useState('');
 
-  const contactFormRef = useRef(null);
+  const categoryFormRef = useRef(null);
   const { id } = useParams();
   const history = useHistory();
   const safeAsyncAction = useSafeAsyncAction();
 
   useEffect(() => {
-    async function loadContact() {
+    async function loadCategory() {
       try {
-        const contact = await ContactsService.getContactById(id);
+        const category = await CategoriesService.getCategoryById(id);
 
         safeAsyncAction(() => {
-          contactFormRef.current.setFieldsValues(contact);
-          setContactName(contact.name);
+          categoryFormRef.current.setFieldsValues(category);
+          setCategoryName(category.name);
           setIsLoading(false);
         });
       } catch (error) {
         safeAsyncAction(() => {
-          history.push('/');
+          history.push('/categories');
           toast({
             type: 'danger',
-            text: 'Contato não encontrado',
+            text: 'Categoria não encontrada',
           });
         });
       }
     }
 
-    loadContact();
+    loadCategory();
   }, [id, history, safeAsyncAction]);
 
-  async function handleSubmit(contact) {
+  async function handleSubmit(category) {
     try {
-      const updatedContact = await ContactsService.updateContact(id, contact);
-      setContactName(updatedContact.name);
+      const updatedCategory = await CategoriesService.updateCategory(id, category);
+      setCategoryName(updatedCategory.name);
 
       toast({
         type: 'success',
-        text: 'Contato editado com sucesso!',
+        text: 'Categoria editada com sucesso!',
       });
     } catch (error) {
       toast({
         type: 'danger',
-        text: 'Ocorreu um erro ao editar o contato',
+        text: 'Ocorreu um erro ao editar a categoria',
       });
     }
   }
@@ -61,12 +61,12 @@ export default function EditContact() {
     <>
       <Loader isLoading={isLoading} />
       <PageHeader
-        title={isLoading ? 'Carregando...' : `Editar ${contactName}`}
+        title={isLoading ? 'Carregando...' : `Editar ${categoryName}`}
         backPath="/"
       />
 
-      <ContactForm
-        ref={contactFormRef}
+      <CategoryForm
+        ref={categoryFormRef}
         buttonLabel="Salvar alterações"
         onSubmit={handleSubmit}
       />

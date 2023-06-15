@@ -5,6 +5,13 @@ class CategoryMapper {
       name: persistenceCategory.name,
     };
   }
+
+  toPersistence(domainCategory) {
+    return {
+      id: domainCategory.id,
+      name: domainCategory.name,
+    };
+  }
 }
 
 export default new CategoryMapper();
