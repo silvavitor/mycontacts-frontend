@@ -1,7 +1,7 @@
 import styled, { css } from 'styled-components';
 
 export const StyledButton = styled.button`
-  height: 52px;
+  height: ${({ height }) => `${height}px`};
   padding: 0 16px;
   border: none;
   background: ${({ theme }) => theme.colors.primary.main};
