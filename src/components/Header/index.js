@@ -11,10 +11,10 @@ export default function Header() {
         <img src={logo} alt="My Contacts" />
       </Link>
       <Menu>
-        <Button>
+        <Button height={40}>
           <Link to="/">Contatos</Link>
         </Button>
-        <Button>
+        <Button height={40}>
           <Link to="/categories">Categorias</Link>
         </Button>
       </Menu>
