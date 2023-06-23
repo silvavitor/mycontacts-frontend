@@ -1,7 +1,5 @@
 /* eslint-disable no-nested-ternary */
-import {
-  useCallback, useEffect, useMemo, useState,
-} from 'react';
+
 import { Link } from 'react-router-dom';
 import {
   Container,
@@ -13,7 +11,6 @@ import {
   ListHeader,
   Card,
 } from './styles';
-import CategoriesService from '../../services/CategoriesService';
 
 import Loader from '../../components/Loader';
 import Button from '../../components/Button';
@@ -25,92 +22,26 @@ import trash from '../../assets/images/icons/trash.svg';
 import sad from '../../assets/images/sad.svg';
 import emptyBox from '../../assets/images/empty-box.svg';
 import magnifierQuestion from '../../assets/images/magnifier-question.svg';
-import toast from '../../utils/toast';
+import useCategories from './useCategories';
 
 export default function Categories() {
-  const [categories, setCategories] = useState([]);
-  const [orderBy, setOrderBy] = useState('asc');
-  const [searchTerm, setSearchTerm] = useState('');
-  const [isLoading, setIsLoading] = useState(true);
-  const [hasError, setHasError] = useState(false);
-  const [isDeleteModalVisible, setIsDeleteModalVisible] = useState(false);
-  const [categorieBeingDeleted, setCategorieBeingDeleted] = useState();
-  const [isLoadingDelete, setIsLoadingDelete] = useState(false);
-
-  const fileredCategories = useMemo(() => categories.filter((contact) => (
-    contact.name.toLowerCase().includes(searchTerm.toLowerCase())
-  )), [categories, searchTerm]);
-
-  const loadCategories = useCallback(async () => {
-    try {
-      setIsLoading(true);
-
-      const categoriesList = await CategoriesService.listCategories(orderBy);
-
-      setCategories(categoriesList);
-      setHasError(false);
-    } catch {
-      setHasError(true);
-    } finally {
-      setIsLoading(false);
-    }
-  }, [orderBy]);
-
-  useEffect(() => {
-    loadCategories();
-  }, [loadCategories]);
-
-  function handleChangeSearchTerm(event) {
-    setSearchTerm(event.target.value);
-  }
-
-  function handleTryAgain() {
-    loadCategories();
-  }
-
-  function handleToggleOrderBy() {
-    setOrderBy((prevState) => (prevState === 'asc' ? 'desc' : 'asc'));
-  }
-
-  function handleDeleteCategorie(contact) {
-    setCategorieBeingDeleted(contact);
-    setIsDeleteModalVisible(true);
-  }
-
-  function handleCloseDeleteModal() {
-    setIsDeleteModalVisible(false);
-  }
-
-  async function handleConfirmDeleteContact() {
-    try {
-      setIsLoadingDelete(true);
-      await CategoriesService.deleteCategory(categorieBeingDeleted.id);
-
-      setCategories((prevState) => prevState.filter(
-        (categorie) => categorie.id !== categorieBeingDeleted.id,
-      ));
-
-      toast({
-        type: 'success',
-        text: 'Categoria deleteda com sucesso!',
-      });
-    } catch (error) {
-      if (error.response.status === 403) {
-        toast({
-          type: 'danger',
-          text: 'Não foi possível deletar a categoria pois está atrelada a um contato!',
-        });
-      } else {
-        toast({
-          type: 'danger',
-          text: 'Ocorreu um erro ao deletar a categoria!',
-        });
-      }
-    } finally {
-      setIsLoadingDelete(false);
-      handleCloseDeleteModal();
-    }
-  }
+  const {
+    isLoading,
+    isDeleteModalVisible,
+    categoryBeingDeleted,
+    handleConfirmDeleteCategory,
+    handleCloseDeleteModal,
+    isLoadingDelete,
+    categories,
+    searchTerm,
+    handleChangeSearchTerm,
+    hasError,
+    fileredCategories,
+    handleTryAgain,
+    orderBy,
+    handleToggleOrderBy,
+    handleDeleteCategory,
+  } = useCategories();
 
   return (
     <Container>
@@ -119,9 +50,9 @@ export default function Categories() {
       <Modal
         danger
         visible={isDeleteModalVisible}
-        title={`Tem certeza que deseja remover a categoria "${categorieBeingDeleted?.name}"?`}
+        title={`Tem certeza que deseja remover a categoria "${categoryBeingDeleted?.name}"?`}
         confirmLabel="Deletar"
-        onConfirm={handleConfirmDeleteContact}
+        onConfirm={handleConfirmDeleteCategory}
         onCancel={handleCloseDeleteModal}
         isLoading={isLoadingDelete}
       >
@@ -224,7 +155,7 @@ export default function Categories() {
                 </Link>
                 <button
                   type="button"
-                  onClick={() => handleDeleteCategorie(categorie)}
+                  onClick={() => handleDeleteCategory(categorie)}
                 >
                   <img src={trash} alt="Trash" />
                 </button>
