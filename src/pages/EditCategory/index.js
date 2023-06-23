@@ -1,61 +1,15 @@
-import { useParams, useHistory } from 'react-router-dom';
-import { useEffect, useState, useRef } from 'react';
 import PageHeader from '../../components/PageHeader';
 import CategoryForm from '../../components/CategoryForm';
-import CategoriesService from '../../services/CategoriesService';
 import Loader from '../../components/Loader';
-import toast from '../../utils/toast';
-import useSafeAsyncAction from '../../hooks/useSafeAsyncAction';
+import useEditCategory from './useEditCategory';
 
 export default function EditCategory() {
-  const [isLoading, setIsLoading] = useState(true);
-  const [categoryName, setCategoryName] = useState('');
-
-  const categoryFormRef = useRef(null);
-  const { id } = useParams();
-  const history = useHistory();
-  const safeAsyncAction = useSafeAsyncAction();
-
-  useEffect(() => {
-    async function loadCategory() {
-      try {
-        const category = await CategoriesService.getCategoryById(id);
-
-        safeAsyncAction(() => {
-          categoryFormRef.current.setFieldsValues(category);
-          setCategoryName(category.name);
-          setIsLoading(false);
-        });
-      } catch (error) {
-        safeAsyncAction(() => {
-          history.push('/categories');
-          toast({
-            type: 'danger',
-            text: 'Categoria não encontrada',
-          });
-        });
-      }
-    }
-
-    loadCategory();
-  }, [id, history, safeAsyncAction]);
-
-  async function handleSubmit(category) {
-    try {
-      const updatedCategory = await CategoriesService.updateCategory(id, category);
-      setCategoryName(updatedCategory.name);
-
-      toast({
-        type: 'success',
-        text: 'Categoria editada com sucesso!',
-      });
-    } catch (error) {
-      toast({
-        type: 'danger',
-        text: 'Ocorreu um erro ao editar a categoria',
-      });
-    }
-  }
+  const {
+    isLoading,
+    categoryName,
+    categoryFormRef,
+    handleSubmit,
+  } = useEditCategory();
 
   return (
     <>
