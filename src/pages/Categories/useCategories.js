@@ -28,6 +28,7 @@ export default function useCategories() {
       setHasError(false);
     } catch {
       setHasError(true);
+      setCategories([]);
     } finally {
       setIsLoading(false);
     }
