@@ -1,28 +1,16 @@
-/* eslint-disable no-nested-ternary */
-
-import { Link } from 'react-router-dom';
-import {
-  Container,
-  InputSearchContainer,
-  Header,
-  ErrorContainer,
-  EmptyListContainer,
-  SearchNotFoundContainer,
-  ListHeader,
-  Card,
-} from './styles';
+/* eslint-disable react/jsx-one-expression-per-line */
+import { Container } from './styles';
 
 import Loader from '../../components/Loader';
-import Button from '../../components/Button';
 import Modal from '../../components/Modal';
 
-import arrow from '../../assets/images/icons/arrow.svg';
-import edit from '../../assets/images/icons/edit.svg';
-import trash from '../../assets/images/icons/trash.svg';
-import sad from '../../assets/images/sad.svg';
-import emptyBox from '../../assets/images/empty-box.svg';
-import magnifierQuestion from '../../assets/images/magnifier-question.svg';
 import useCategories from './useCategories';
+import InputSearch from '../../components/InputSearch';
+import PageHeader from '../../components/PageHeader';
+import ErrorStatus from '../../components/ErrorStatus';
+import SearchNotFound from '../../components/SearchNotFound';
+import EmptyList from '../../components/EmptyList';
+import CategoriesList from './components/CategoriesList';
 
 export default function Categories() {
   const {
@@ -36,7 +24,7 @@ export default function Categories() {
     searchTerm,
     handleChangeSearchTerm,
     hasError,
-    fileredCategories,
+    filteredCategories,
     handleTryAgain,
     orderBy,
     handleToggleOrderBy,
@@ -47,121 +35,63 @@ export default function Categories() {
     <Container>
       <Loader isLoading={isLoading} />
 
-      <Modal
-        danger
-        visible={isDeleteModalVisible}
-        title={`Tem certeza que deseja remover a categoria "${categoryBeingDeleted?.name}"?`}
-        confirmLabel="Deletar"
-        onConfirm={handleConfirmDeleteCategory}
-        onCancel={handleCloseDeleteModal}
-        isLoading={isLoadingDelete}
-      >
-        <p>Essa acão não poderá ser desfeita!</p>
-      </Modal>
       {categories.length > 0 && (
-        <InputSearchContainer>
-          <input
-            value={searchTerm}
-            type="text"
-            placeholder="Pesquise pelo nome..."
-            onChange={handleChangeSearchTerm}
-          />
-        </InputSearchContainer>
+        <InputSearch value={searchTerm} onChange={handleChangeSearchTerm} />
       )}
 
-      <Header
-        justifyContent={
-          hasError
-            ? 'flex-end'
-            : (
-              categories.length > 0
-                ? 'space-between'
-                : 'center'
-            )
-        }
-      >
-        {(!hasError && categories.length > 0) && (
-          <strong>
-            {fileredCategories.length}
-            {fileredCategories.length === 1 ? ' categoria' : ' categorias'}
-          </strong>
-        )}
-        <Link to="/categories/new">Nova Categoria</Link>
-      </Header>
+      <PageHeader
+        hasError={hasError}
+        listQuantity={categories.length}
+        filteredListQuantity={filteredCategories.length}
+        label="categoria"
+        linkTo="/categories/new"
+        linkLabel="Nova Categoria"
+      />
 
       {hasError && (
-        <ErrorContainer>
-          <img src={sad} alt="sad" />
-          <div className="details">
-            <strong>Ocorreu um erro ao obter as suas categorias</strong>
-            <Button type="button" onClick={handleTryAgain}>Tentar novamente</Button>
-          </div>
-        </ErrorContainer>
+        <ErrorStatus
+          title="Ocorreu um erro ao obter as suas categorias"
+          onTryAgain={handleTryAgain}
+        />
       )}
 
       {!hasError && (
         <>
           {(categories.length < 1 && !isLoading) && (
-            <EmptyListContainer>
-              <img src={emptyBox} alt="Empty box" />
-              <p>
-                Você ainda não tem nenhuma categoria cadastrada!
-                Clique no botão
-                {' '}
-                <strong>”Novo categoria</strong>
-                {' '}
-                à cima
-                para cadastrar a sua primeira!
-              </p>
-            </EmptyListContainer>
+            <EmptyList>
+              Você ainda não tem nenhuma categoria cadastrada!
+              Clique no botão <strong>”Nova categoria”</strong> acima
+              para cadastrar a sua primeira!
+            </EmptyList>
           )}
 
-          {(categories.length > 0 && fileredCategories < 1) && (
-            <SearchNotFoundContainer>
-              <img src={magnifierQuestion} alt="Magnifier Question" />
-
-              <span>
-                Nenhum resultado encontrado para
-                {' '}
-                <strong>
-                  &ldquo;
-                  {searchTerm}
-                  &rdquo;
-                </strong>
-              </span>
-            </SearchNotFoundContainer>
+          {(categories.length > 0 && filteredCategories < 1) && (
+            <SearchNotFound searchTerm={searchTerm} />
           )}
 
-          {fileredCategories.length > 0 && (
-            <ListHeader orderBy={orderBy}>
-              <button type="button" onClick={handleToggleOrderBy}>
-                <span>Nome</span>
-                <img src={arrow} alt="Arrow" />
-              </button>
-            </ListHeader>
+          {filteredCategories.length > 0 && (
+            <>
+              <CategoriesList
+                categories={filteredCategories}
+                orderBy={orderBy}
+                onToggleOrderBy={handleToggleOrderBy}
+                onDeleteCategory={handleDeleteCategory}
+              />
+
+              <Modal
+                danger
+                visible={isDeleteModalVisible}
+                title={`Tem certeza que deseja remover a categoria "${categoryBeingDeleted?.name}"?`}
+                confirmLabel="Deletar"
+                onConfirm={handleConfirmDeleteCategory}
+                onCancel={handleCloseDeleteModal}
+                isLoading={isLoadingDelete}
+              >
+                <p>Essa acão não poderá ser desfeita!</p>
+              </Modal>
+            </>
           )}
 
-          {fileredCategories.map((categorie) => (
-            <Card key={categorie.id}>
-              <div className="info">
-                <div className="categorie-title">
-                  <strong>{categorie.name}</strong>
-                </div>
-              </div>
-
-              <div className="actions">
-                <Link to={`categories/edit/${categorie.id}`}>
-                  <img src={edit} alt="Edit" />
-                </Link>
-                <button
-                  type="button"
-                  onClick={() => handleDeleteCategory(categorie)}
-                >
-                  <img src={trash} alt="Trash" />
-                </button>
-              </div>
-            </Card>
-          ))}
         </>
       )}
 
