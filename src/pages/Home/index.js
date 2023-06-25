@@ -30,14 +30,18 @@ export default function Home() {
     handleToggleOrderBy,
     handleDeleteContact,
   } = useHome();
+
+  const hasContacts = contacts.length > 0;
+  const hasFilteredContacts = filteredContacts.length > 0;
+  const isListEmpty = (!hasError && !isLoading && !hasContacts);
+  const isSearchEmpty = (!hasError && hasContacts && !hasFilteredContacts);
+
   return (
     <Container>
 
       <Loader isLoading={isLoading} />
 
-      {contacts.length > 0 && (
-        <InputSearch value={searchTerm} onChange={handleChangeSearchTerm} />
-      )}
+      {hasContacts && <InputSearch value={searchTerm} onChange={handleChangeSearchTerm} />}
 
       <PageHeader
         hasError={hasError}
@@ -55,45 +59,39 @@ export default function Home() {
         />
       )}
 
-      {!hasError && (
+      {isListEmpty && (
+        <EmptyList>
+          Você ainda não tem nenhum contato cadastrado!
+          Clique no botão <strong>”Novo contato”</strong> acima
+          para cadastrar o seu primeiro!
+        </EmptyList>
+      )}
+
+      {isSearchEmpty && <SearchNotFound searchTerm={searchTerm} />}
+
+      {hasFilteredContacts && (
         <>
-          {(contacts.length < 1 && !isLoading) && (
-            <EmptyList>
-              Você ainda não tem nenhum contato cadastrado!
-              Clique no botão <strong>”Novo contato”</strong> acima
-              para cadastrar o seu primeiro!
-            </EmptyList>
-          )}
+          <ContactsList
+            contacts={filteredContacts}
+            orderBy={orderBy}
+            onToggleOrderBy={handleToggleOrderBy}
+            onDeleteContact={handleDeleteContact}
+          />
 
-          {(contacts.length > 0 && filteredContacts < 1) && (
-            <SearchNotFound searchTerm={searchTerm} />
-          )}
-
-          {filteredContacts.length > 0 && (
-            <>
-              <ContactsList
-                contacts={filteredContacts}
-                orderBy={orderBy}
-                onToggleOrderBy={handleToggleOrderBy}
-                onDeleteContact={handleDeleteContact}
-              />
-
-              <Modal
-                danger
-                visible={isDeleteModalVisible}
-                title={`Tem certeza que deseja remover o contato "${contactBeingDeleted?.name}"?`}
-                confirmLabel="Deletar"
-                onConfirm={handleConfirmDeleteContact}
-                onCancel={handleCloseDeleteModal}
-                isLoading={isLoadingDelete}
-              >
-                <p>Essa acão não poderá ser desfeita!</p>
-              </Modal>
-            </>
-          )}
-
+          <Modal
+            danger
+            visible={isDeleteModalVisible}
+            title={`Tem certeza que deseja remover o contato "${contactBeingDeleted?.name}"?`}
+            confirmLabel="Deletar"
+            onConfirm={handleConfirmDeleteContact}
+            onCancel={handleCloseDeleteModal}
+            isLoading={isLoadingDelete}
+          >
+            <p>Essa acão não poderá ser desfeita!</p>
+          </Modal>
         </>
       )}
+
     </Container>
   );
 }

@@ -31,6 +31,11 @@ export default function Categories() {
     handleDeleteCategory,
   } = useCategories();
 
+  const hasCategories = categories.length > 0;
+  const hasFilteredCategories = filteredCategories.length > 0;
+  const isListEmpty = (!hasError && !isLoading && !hasCategories);
+  const isSearchEmpty = (!hasError && hasCategories && !hasFilteredCategories);
+
   return (
     <Container>
       <Loader isLoading={isLoading} />
@@ -55,43 +60,36 @@ export default function Categories() {
         />
       )}
 
-      {!hasError && (
+      {isListEmpty && (
+        <EmptyList>
+          Você ainda não tem nenhuma categoria cadastrada!
+          Clique no botão <strong>”Nova categoria”</strong> acima
+          para cadastrar a sua primeira!
+        </EmptyList>
+      )}
+
+      {isSearchEmpty && <SearchNotFound searchTerm={searchTerm} />}
+
+      {hasFilteredCategories && (
         <>
-          {(categories.length < 1 && !isLoading) && (
-            <EmptyList>
-              Você ainda não tem nenhuma categoria cadastrada!
-              Clique no botão <strong>”Nova categoria”</strong> acima
-              para cadastrar a sua primeira!
-            </EmptyList>
-          )}
+          <CategoriesList
+            categories={filteredCategories}
+            orderBy={orderBy}
+            onToggleOrderBy={handleToggleOrderBy}
+            onDeleteCategory={handleDeleteCategory}
+          />
 
-          {(categories.length > 0 && filteredCategories < 1) && (
-            <SearchNotFound searchTerm={searchTerm} />
-          )}
-
-          {filteredCategories.length > 0 && (
-            <>
-              <CategoriesList
-                categories={filteredCategories}
-                orderBy={orderBy}
-                onToggleOrderBy={handleToggleOrderBy}
-                onDeleteCategory={handleDeleteCategory}
-              />
-
-              <Modal
-                danger
-                visible={isDeleteModalVisible}
-                title={`Tem certeza que deseja remover a categoria "${categoryBeingDeleted?.name}"?`}
-                confirmLabel="Deletar"
-                onConfirm={handleConfirmDeleteCategory}
-                onCancel={handleCloseDeleteModal}
-                isLoading={isLoadingDelete}
-              >
-                <p>Essa acão não poderá ser desfeita!</p>
-              </Modal>
-            </>
-          )}
-
+          <Modal
+            danger
+            visible={isDeleteModalVisible}
+            title={`Tem certeza que deseja remover a categoria "${categoryBeingDeleted?.name}"?`}
+            confirmLabel="Deletar"
+            onConfirm={handleConfirmDeleteCategory}
+            onCancel={handleCloseDeleteModal}
+            isLoading={isLoadingDelete}
+          >
+            <p>Essa acão não poderá ser desfeita!</p>
+          </Modal>
         </>
       )}
 
