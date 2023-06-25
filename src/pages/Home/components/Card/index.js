@@ -38,7 +38,9 @@ Card.propTypes = {
     name: PropTypes.string.isRequired,
     email: PropTypes.string,
     phone: PropTypes.string,
-    category: PropTypes.shape,
+    category: PropTypes.shape({
+      name: PropTypes.string.isRequired,
+    }),
   }).isRequired,
   onDeleteContact: PropTypes.func.isRequired,
 };
