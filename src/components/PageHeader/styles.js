@@ -1,25 +1,29 @@
 import styled from 'styled-components';
 
 export const Container = styled.header`
-  margin-bottom: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: ${({ justifyContent }) => justifyContent};
+  margin-top: 32px;
+  border-bottom: 2px solid ${({ theme }) => theme.colors.gray[100]};
+  padding-bottom: 16px;
 
-  a {
-    display: flex;
-    align-items: center;
-    text-decoration: none;
-
-    span {
-      color: ${({ theme }) => theme.colors.primary.main};
-      font-weight: bold;
-    }
-
-    img {
-      margin-right: 8px;
-      transform: rotate(-90deg);
-    }
+  strong {
+    font-size: 24px;
   }
 
-  h1 {
-    font-size: 24px;
+  a {
+    padding: 8px 16px;
+    color: ${({ theme }) => theme.colors.primary.main};
+    text-decoration: none;
+    font-weight: bold;
+    border: 2px solid ${({ theme }) => theme.colors.primary.main};
+    border-radius: 4px;
+    transition: all 0.2s ease-in;
+
+    &:hover {
+      background: ${({ theme }) => theme.colors.primary.main};
+      color: #FFF;
+    }
   }
 `;
