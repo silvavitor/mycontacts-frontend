@@ -1,5 +1,5 @@
 import ContactForm from '../../components/ContactForm';
-import PageHeader from '../../components/PageHeader';
+import PageFormHeader from '../../components/PageFormHeader';
 import useNewContact from './useNewContact';
 
 export default function NewContact() {
@@ -10,7 +10,7 @@ export default function NewContact() {
 
   return (
     <>
-      <PageHeader title="Novo Contato" backPath="/" />
+      <PageFormHeader title="Novo Contato" backPath="/" />
       <ContactForm
         ref={contactFormRef}
         buttonLabel="Cadastrar"

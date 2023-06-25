@@ -1,4 +1,4 @@
-import PageHeader from '../../components/PageHeader';
+import PageFormHeader from '../../components/PageFormHeader';
 import ContactForm from '../../components/ContactForm';
 import Loader from '../../components/Loader';
 import useEditContact from './useEditContact';
@@ -14,7 +14,7 @@ export default function EditContact() {
   return (
     <>
       <Loader isLoading={isLoading} />
-      <PageHeader
+      <PageFormHeader
         title={isLoading ? 'Carregando...' : `Editar ${contactName}`}
         backPath="/"
       />

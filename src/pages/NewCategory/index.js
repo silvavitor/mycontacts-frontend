@@ -1,5 +1,5 @@
 import CategoryForm from '../../components/CategoryForm';
-import PageHeader from '../../components/PageHeader';
+import PageFormHeader from '../../components/PageFormHeader';
 import useNewCategory from './useNewCategory';
 
 export default function NewCategory() {
@@ -10,7 +10,7 @@ export default function NewCategory() {
 
   return (
     <>
-      <PageHeader title="Nova Categoria" backPath="/categories" />
+      <PageFormHeader title="Nova Categoria" backPath="/categories" />
       <CategoryForm
         ref={categoryFormRef}
         buttonLabel="Cadastrar"

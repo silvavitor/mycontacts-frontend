@@ -1,4 +1,4 @@
-import PageHeader from '../../components/PageHeader';
+import PageFormHeader from '../../components/PageFormHeader';
 import CategoryForm from '../../components/CategoryForm';
 import Loader from '../../components/Loader';
 import useEditCategory from './useEditCategory';
@@ -14,7 +14,7 @@ export default function EditCategory() {
   return (
     <>
       <Loader isLoading={isLoading} />
-      <PageHeader
+      <PageFormHeader
         title={isLoading ? 'Carregando...' : `Editar ${categoryName}`}
         backPath="/"
       />
