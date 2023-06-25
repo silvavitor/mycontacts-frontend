@@ -16,7 +16,7 @@ export default function EditCategory() {
       <Loader isLoading={isLoading} />
       <PageFormHeader
         title={isLoading ? 'Carregando...' : `Editar ${categoryName}`}
-        backPath="/"
+        backPath="/categories"
       />
 
       <CategoryForm
