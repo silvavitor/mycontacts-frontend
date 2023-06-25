@@ -14,13 +14,9 @@ export default function PageHeader({
   return (
     <Container
       justifyContent={
-        hasError
-          ? 'flex-end'
-          : (
-            listQuantity > 0
-              ? 'space-between'
-              : 'center'
-          )
+        listQuantity > 0
+          ? 'space-between'
+          : 'center'
       }
     >
       {(!hasError && listQuantity > 0) && (
