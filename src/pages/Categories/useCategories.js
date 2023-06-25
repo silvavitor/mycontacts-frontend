@@ -14,7 +14,7 @@ export default function useCategories() {
   const [categoryBeingDeleted, setCategoryBeingDeleted] = useState();
   const [isLoadingDelete, setIsLoadingDelete] = useState(false);
 
-  const fileredCategories = useMemo(() => categories.filter((category) => (
+  const filteredCategories = useMemo(() => categories.filter((category) => (
     category.name.toLowerCase().includes(searchTerm.toLowerCase())
   )), [categories, searchTerm]);
 
@@ -100,7 +100,7 @@ export default function useCategories() {
     searchTerm,
     handleChangeSearchTerm,
     hasError,
-    fileredCategories,
+    filteredCategories,
     handleTryAgain,
     orderBy,
     handleToggleOrderBy,
