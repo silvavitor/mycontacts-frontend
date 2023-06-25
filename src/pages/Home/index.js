@@ -1,29 +1,16 @@
 /* eslint-disable react/jsx-one-expression-per-line */
-/* eslint-disable no-nested-ternary */
-import { Link } from 'react-router-dom';
-
-import {
-  Container,
-  InputSearchContainer,
-  Header,
-  ListHeader,
-  Card,
-  ErrorContainer,
-  EmptyListContainer,
-  SearchNotFoundContainer,
-} from './styles';
+import { Container } from './styles';
 
 import Loader from '../../components/Loader';
-import Button from '../../components/Button';
 import Modal from '../../components/Modal';
 
-import arrow from '../../assets/images/icons/arrow.svg';
-import edit from '../../assets/images/icons/edit.svg';
-import trash from '../../assets/images/icons/trash.svg';
-import sad from '../../assets/images/sad.svg';
-import emptyBox from '../../assets/images/empty-box.svg';
-import magnifierQuestion from '../../assets/images/magnifier-question.svg';
 import useHome from './useHome';
+import InputSearch from '../../components/InputSearch';
+import PageHeader from '../../components/PageHeader';
+import ErrorStatus from '../../components/ErrorStatus';
+import SearchNotFound from '../../components/SearchNotFound';
+import EmptyList from '../../components/EmptyList';
+import ContactsList from './components/ContactsList';
 
 export default function Home() {
   const {
@@ -37,7 +24,7 @@ export default function Home() {
     searchTerm,
     handleChangeSearchTerm,
     hasError,
-    fileredContacts,
+    filteredContacts,
     handleTryAgain,
     orderBy,
     handleToggleOrderBy,
@@ -48,115 +35,63 @@ export default function Home() {
 
       <Loader isLoading={isLoading} />
 
-      <Modal
-        danger
-        visible={isDeleteModalVisible}
-        title={`Tem certeza que deseja remover o contato "${contactBeingDeleted?.name}"?`}
-        confirmLabel="Deletar"
-        onConfirm={handleConfirmDeleteContact}
-        onCancel={handleCloseDeleteModal}
-        isLoading={isLoadingDelete}
-      >
-        <p>Essa acão não poderá ser desfeita!</p>
-      </Modal>
-
       {contacts.length > 0 && (
-        <InputSearchContainer>
-          <input
-            value={searchTerm}
-            type="text"
-            placeholder="Pesquise pelo nome..."
-            onChange={handleChangeSearchTerm}
-          />
-        </InputSearchContainer>
+        <InputSearch value={searchTerm} onChange={handleChangeSearchTerm} />
       )}
 
-      <Header
-        justifyContent={
-          hasError
-            ? 'flex-end'
-            : (
-              contacts.length > 0
-                ? 'space-between'
-                : 'center'
-            )
-        }
-      >
-        {(!hasError && contacts.length > 0) && (
-          <strong>
-            {fileredContacts.length}
-            {fileredContacts.length === 1 ? ' contato' : ' contatos'}
-          </strong>
-        )}
-        <Link to="/new">Novo contato</Link>
-      </Header>
+      <PageHeader
+        hasError={hasError}
+        listQuantity={contacts.length}
+        filteredListQuantity={filteredContacts.length}
+        label="contato"
+        linkTo="/new"
+        linkLabel="Novo contato"
+      />
 
       {hasError && (
-        <ErrorContainer>
-          <img src={sad} alt="sad" />
-          <div className="details">
-            <strong>Ocorreu um erro ao obter os seus contatos</strong>
-            <Button type="button" onClick={handleTryAgain}>Tentar novamente</Button>
-          </div>
-        </ErrorContainer>
+        <ErrorStatus
+          title="Ocorreu um erro ao obter os seus contatos"
+          onTryAgain={handleTryAgain}
+        />
       )}
 
       {!hasError && (
         <>
           {(contacts.length < 1 && !isLoading) && (
-            <EmptyListContainer>
-              <img src={emptyBox} alt="Empty box" />
-              <p>
-                Você ainda não tem nenhum contato cadastrado!
-                Clique no botão <strong>”Novo contato”</strong> à cima
-                para cadastrar o seu primeiro!
-              </p>
-            </EmptyListContainer>
+            <EmptyList>
+              Você ainda não tem nenhum contato cadastrado!
+              Clique no botão <strong>”Novo contato”</strong> acima
+              para cadastrar o seu primeiro!
+            </EmptyList>
           )}
 
-          {(contacts.length > 0 && fileredContacts < 1) && (
-            <SearchNotFoundContainer>
-              <img src={magnifierQuestion} alt="Magnifier Question" />
-
-              <span>
-                Nenhum resultado encontrado para <strong>&ldquo;{searchTerm}&rdquo;</strong>
-              </span>
-            </SearchNotFoundContainer>
+          {(contacts.length > 0 && filteredContacts < 1) && (
+            <SearchNotFound searchTerm={searchTerm} />
           )}
 
-          {fileredContacts.length > 0 && (
-            <ListHeader orderBy={orderBy}>
-              <button type="button" onClick={handleToggleOrderBy}>
-                <span>Nome</span>
-                <img src={arrow} alt="Arrow" />
-              </button>
-            </ListHeader>
+          {filteredContacts.length > 0 && (
+            <>
+              <ContactsList
+                contacts={filteredContacts}
+                orderBy={orderBy}
+                onToggleOrderBy={handleToggleOrderBy}
+                onDeleteContact={handleDeleteContact}
+              />
+
+              <Modal
+                danger
+                visible={isDeleteModalVisible}
+                title={`Tem certeza que deseja remover o contato "${contactBeingDeleted?.name}"?`}
+                confirmLabel="Deletar"
+                onConfirm={handleConfirmDeleteContact}
+                onCancel={handleCloseDeleteModal}
+                isLoading={isLoadingDelete}
+              >
+                <p>Essa acão não poderá ser desfeita!</p>
+              </Modal>
+            </>
           )}
 
-          {fileredContacts.map((contact) => (
-            <Card key={contact.id}>
-              <div className="info">
-                <div className="contact-title">
-                  <strong>{contact.name}</strong>
-                  {contact.category.name && (<small>{contact.category.name}</small>)}
-                </div>
-                <span>{contact.email}</span>
-                <span>{contact.phone}</span>
-              </div>
-
-              <div className="actions">
-                <Link to={`edit/${contact.id}`}>
-                  <img src={edit} alt="Edit" />
-                </Link>
-                <button
-                  type="button"
-                  onClick={() => handleDeleteContact(contact)}
-                >
-                  <img src={trash} alt="Trash" />
-                </button>
-              </div>
-            </Card>
-          ))}
         </>
       )}
     </Container>
