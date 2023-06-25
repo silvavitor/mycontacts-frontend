@@ -15,7 +15,7 @@ export default function useHome() {
   const [contactBeingDeleted, setContactBeingDeleted] = useState();
   const [isLoadingDelete, setIsLoadingDelete] = useState(false);
 
-  const fileredContacts = useMemo(() => contacts.filter((contact) => (
+  const filteredContacts = useMemo(() => contacts.filter((contact) => (
     contact.name.toLowerCase().includes(searchTerm.toLowerCase())
   )), [contacts, searchTerm]);
 
@@ -94,7 +94,7 @@ export default function useHome() {
     searchTerm,
     handleChangeSearchTerm,
     hasError,
-    fileredContacts,
+    filteredContacts,
     handleTryAgain,
     orderBy,
     handleToggleOrderBy,
