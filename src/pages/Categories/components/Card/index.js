@@ -30,7 +30,7 @@ export default function Card({ category, onDeleteCategory }) {
 
 Card.propTypes = {
   category: PropTypes.shape({
-    id: PropTypes.number.isRequired,
+    id: PropTypes.string.isRequired,
     name: PropTypes.string.isRequired,
   }).isRequired,
   onDeleteCategory: PropTypes.func.isRequired,

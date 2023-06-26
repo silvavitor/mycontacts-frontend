@@ -34,12 +34,12 @@ export default function Card({ contact, onDeleteContact }) {
 
 Card.propTypes = {
   contact: PropTypes.shape({
-    id: PropTypes.number.isRequired,
+    id: PropTypes.string.isRequired,
     name: PropTypes.string.isRequired,
     email: PropTypes.string,
     phone: PropTypes.string,
     category: PropTypes.shape({
-      name: PropTypes.string.isRequired,
+      name: PropTypes.string,
     }),
   }).isRequired,
   onDeleteContact: PropTypes.func.isRequired,

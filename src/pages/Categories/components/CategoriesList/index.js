@@ -18,7 +18,7 @@ export default function CategoriesList({
 
 CategoriesList.propTypes = {
   categories: PropTypes.arrayOf(PropTypes.shape({
-    id: PropTypes.number.isRequired,
+    id: PropTypes.string.isRequired,
     name: PropTypes.string.isRequired,
   })).isRequired,
   orderBy: PropTypes.string.isRequired,
