@@ -1,7 +1,7 @@
 import CategoryMapper from './mappers/CategoryMapper';
 import HttpClient from './utils/HttpClient';
 
-class ContegoriesService {
+class CategoriesService {
   constructor() {
     this.apiClient = new HttpClient('http://localhost:3132');
   }
@@ -35,4 +35,4 @@ class ContegoriesService {
   }
 }
 
-export default new ContegoriesService();
+export default new CategoriesService();
