@@ -4,9 +4,8 @@ import useAnimatedList from '../../../hooks/useAnimatedList';
 
 export default function useToastContainer() {
   const {
-    items: messages,
-    pendingRemovalItemsIds,
     setItems: setMessages,
+    renderList,
     handleRemoveItem,
     handleAnimationEnd,
   } = useAnimatedList();
@@ -29,8 +28,7 @@ export default function useToastContainer() {
   }, [setMessages]);
 
   return {
-    messages,
-    pendingRemovalItemsIds,
+    renderList,
     handleRemoveItem,
     handleAnimationEnd,
   };
