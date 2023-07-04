@@ -15,9 +15,7 @@ export default function useAnimatedUnmount(visible) {
     if (visible) {
       setShouldRender(true);
     } else if (elementRef) {
-      elementRef.addEventListener('animationend', () => {
-        handleAnimationEnd();
-      });
+      elementRef.addEventListener('animationend', handleAnimationEnd);
     }
 
     return () => {

@@ -5,7 +5,9 @@ import useToastContainer from './useToastContainer';
 export default function ToastContainer() {
   const {
     messages,
+    pendingRemovalMessagesIds,
     handleRemoveMessage,
+    handleAnimationEnd,
   } = useToastContainer();
 
   return (
@@ -15,6 +17,8 @@ export default function ToastContainer() {
           key={message.id}
           message={message}
           onRemoveMessage={handleRemoveMessage}
+          isLeaving={pendingRemovalMessagesIds.includes(message.id)}
+          onAnimationEnd={handleAnimationEnd}
         />
       ))}
     </Container>
