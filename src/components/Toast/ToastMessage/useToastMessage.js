@@ -1,25 +1,7 @@
 import PropTypes from 'prop-types';
-import { useEffect, useRef } from 'react';
+import { useEffect } from 'react';
 
-export default function useToastMessage(message, isLeaving, onRemoveMessage, onAnimationEnd) {
-  const animatedElementRef = useRef(null);
-
-  useEffect(() => {
-    function handleAnimationEnd() {
-      onAnimationEnd(message.id);
-    }
-
-    const elementRef = animatedElementRef.current;
-
-    if (isLeaving) {
-      elementRef.addEventListener('animationend', handleAnimationEnd);
-    }
-
-    return () => {
-      elementRef.removeEventListener('animationend', handleAnimationEnd);
-    };
-  }, [isLeaving, message.id, onAnimationEnd]);
-
+export default function useToastMessage(message, isLeaving, onRemoveMessage) {
   useEffect(() => {
     const timeoutId = setTimeout(() => { onRemoveMessage(message.id); }, message.duration || 7000);
 
@@ -32,7 +14,7 @@ export default function useToastMessage(message, isLeaving, onRemoveMessage, onA
     onRemoveMessage(message.id);
   }
 
-  return { handleRemoveToast, animatedElementRef };
+  return { handleRemoveToast };
 }
 
 useToastMessage.propTypes = {
