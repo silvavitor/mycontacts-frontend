@@ -18,11 +18,11 @@ export default function useCategories() {
     category.name.toLowerCase().includes(searchTerm.toLowerCase())
   )), [categories, searchTerm]);
 
-  const loadCategories = useCallback(async () => {
+  const loadCategories = useCallback(async (signal) => {
     try {
       setIsLoading(true);
 
-      const categoriesList = await CategoriesService.listCategories(orderBy);
+      const categoriesList = await CategoriesService.listCategories(orderBy, signal);
 
       setCategories(categoriesList);
       setHasError(false);
@@ -35,7 +35,13 @@ export default function useCategories() {
   }, [orderBy]);
 
   useEffect(() => {
-    loadCategories();
+    const controller = new AbortController();
+
+    loadCategories(controller.signal);
+
+    return () => {
+      controller.abort();
+    };
   }, [loadCategories]);
 
   function handleChangeSearchTerm(event) {

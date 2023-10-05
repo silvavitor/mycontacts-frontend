@@ -12,14 +12,14 @@ class CategoriesService {
     return this.apiClient.post('/categories', { body });
   }
 
-  async listCategories(orderBy = 'asc') {
-    const categories = await this.apiClient.get(`/categories?orderBy=${orderBy}`);
+  async listCategories(orderBy, signal) {
+    const categories = await this.apiClient.get(`/categories?orderBy=${orderBy || 'asc'}`, { signal });
 
     return categories.map(CategoryMapper.toDomain);
   }
 
-  async getCategoryById(id) {
-    const contact = await this.apiClient.get(`/categories/${id}`);
+  async getCategoryById(id, signal) {
+    const contact = await this.apiClient.get(`/categories/${id}`, { signal });
 
     return CategoryMapper.toDomain(contact);
   }

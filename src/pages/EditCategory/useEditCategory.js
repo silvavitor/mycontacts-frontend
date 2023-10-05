@@ -14,9 +14,11 @@ export default function useEditCategory() {
   const safeAsyncAction = useSafeAsyncAction();
 
   useEffect(() => {
-    async function loadCategory() {
+    const controller = new AbortController();
+
+    async function loadCategory(signal) {
       try {
-        const category = await CategoriesService.getCategoryById(id);
+        const category = await CategoriesService.getCategoryById(id, signal);
 
         safeAsyncAction(() => {
           categoryFormRef.current.setFieldsValues(category);
@@ -24,6 +26,10 @@ export default function useEditCategory() {
           setIsLoading(false);
         });
       } catch (error) {
+        if (error instanceof DOMException && error.name === 'AbortError') {
+          return;
+        }
+
         safeAsyncAction(() => {
           history.push('/categories');
           toast({
@@ -34,7 +40,11 @@ export default function useEditCategory() {
       }
     }
 
-    loadCategory();
+    loadCategory(controller.signal);
+
+    return () => {
+      controller.abort();
+    };
   }, [id, history, safeAsyncAction]);
 
   async function handleSubmit(category) {
