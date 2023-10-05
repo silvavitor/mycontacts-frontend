@@ -1,8 +1,9 @@
 import PropTypes from 'prop-types';
+import { memo } from 'react';
 import ListHeader from '../../../../components/ListHeader';
 import Card from '../Card';
 
-export default function ContactsList({
+function ContactsList({
   contacts, orderBy, onToggleOrderBy, onDeleteContact,
 }) {
   return (
@@ -30,3 +31,5 @@ ContactsList.propTypes = {
   onToggleOrderBy: PropTypes.func.isRequired,
   onDeleteContact: PropTypes.func.isRequired,
 };
+
+export default memo(ContactsList);

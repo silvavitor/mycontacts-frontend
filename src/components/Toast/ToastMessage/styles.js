@@ -1,25 +1,25 @@
 import styled, { css, keyframes } from 'styled-components';
 
 const messageIn = keyframes`
-  from { 
-    opacity: 0; 
+  from {
+    opacity: 0;
     transform: translateY(100px);
   }
-  to { 
+  to {
     opacity: 1;
     transform: translateY(0px);
-  }  
+  }
 `;
 
 const messageOut = keyframes`
-  from { 
+  from {
     opacity: 1;
     transform: translateY(0px);
   }
-  to { 
-    opacity: 0; 
+  to {
+    opacity: 0;
     transform: translateY(100px);
-  }  
+  }
 `;
 
 const containerVariants = {
@@ -47,7 +47,7 @@ export const Container = styled.div`
   animation: ${messageIn} 0.3s;
 
   ${({ isLeaving }) => isLeaving && css`
-    animation: ${messageOut} 0.3s;
+    animation: ${messageOut} 0.3s forwards;
   `};
 
   ${({ type }) => containerVariants[type] || containerVariants.default};
