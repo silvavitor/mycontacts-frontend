@@ -3,7 +3,7 @@ import Button from '../Button';
 import sad from '../../assets/images/sad.svg';
 import { Container } from './styles';
 
-export default function ErrorStatus({ title, onTryAgain, label }) {
+export default function ErrorStatus({ title, onTryAgain, label = 'Tentar Novamente' }) {
   return (
     <Container>
       <img src={sad} alt="sad" />
@@ -19,8 +19,4 @@ ErrorStatus.propTypes = {
   title: PropTypes.string.isRequired,
   onTryAgain: PropTypes.func.isRequired,
   label: PropTypes.string,
-};
-
-ErrorStatus.defaultProps = {
-  label: 'Tentar Novamente',
 };
