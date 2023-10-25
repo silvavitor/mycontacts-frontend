@@ -1,4 +1,4 @@
-import { useParams, useHistory } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { useEffect, useState, useRef } from 'react';
 import CategoriesService from '../../services/CategoriesService';
 import toast from '../../utils/toast';
@@ -10,7 +10,7 @@ export default function useEditCategory() {
 
   const categoryFormRef = useRef(null);
   const { id } = useParams();
-  const history = useHistory();
+  const navigate = useNavigate();
   const safeAsyncAction = useSafeAsyncAction();
 
   useEffect(() => {
@@ -31,7 +31,7 @@ export default function useEditCategory() {
         }
 
         safeAsyncAction(() => {
-          history.push('/categories');
+          navigate('/categories', { replace: true });
           toast({
             type: 'danger',
             text: 'Categoria não encontrada',
@@ -45,7 +45,7 @@ export default function useEditCategory() {
     return () => {
       controller.abort();
     };
-  }, [id, history, safeAsyncAction]);
+  }, [id, navigate, safeAsyncAction]);
 
   async function handleSubmit(category) {
     try {
