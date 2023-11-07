@@ -25,7 +25,7 @@ export default function useHome() {
     try {
       setIsLoading(true);
 
-      const contactsList = await ContactsService.listContacts(signal, orderBy);
+      const contactsList = await ContactsService.listContacts(orderBy, signal);
 
       setContacts(contactsList);
       setHasError(false);
