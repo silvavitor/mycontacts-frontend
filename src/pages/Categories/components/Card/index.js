@@ -14,7 +14,7 @@ export default function Card({ category, onDeleteCategory }) {
       </div>
 
       <div className="actions">
-        <Link to={`categories/edit/${category.id}`}>
+        <Link to={`/categories/edit/${category.id}`}>
           <img src={edit} alt="Edit" />
         </Link>
         <button
