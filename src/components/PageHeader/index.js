@@ -13,7 +13,7 @@ export default function PageHeader({
 }) {
   return (
     <Container
-      justifyContent={
+      $justifyContent={
         listQuantity > 0
           ? 'space-between'
           : 'center'

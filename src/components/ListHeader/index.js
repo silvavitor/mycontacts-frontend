@@ -4,7 +4,7 @@ import { Header } from './styles';
 
 export default function ListHeader({ orderBy, onToggleOrderBy }) {
   return (
-    <Header orderBy={orderBy}>
+    <Header $orderBy={orderBy}>
       <button type="button" onClick={onToggleOrderBy}>
         <span>Nome</span>
         <img src={arrow} alt="Arrow" />
