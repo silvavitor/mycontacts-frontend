@@ -79,7 +79,7 @@ export default function Home() {
           />
 
           <Modal
-            $danger
+            danger
             visible={isDeleteModalVisible}
             title={`Tem certeza que deseja remover o contato "${contactBeingDeleted?.name}"?`}
             confirmLabel="Deletar"

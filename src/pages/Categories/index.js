@@ -80,7 +80,7 @@ export default function Categories() {
           />
 
           <Modal
-            $danger
+            danger
             visible={isDeleteModalVisible}
             title={`Tem certeza que deseja remover a categoria "${categoryBeingDeleted?.name}"?`}
             confirmLabel="Deletar"
