@@ -41,6 +41,7 @@
       {
         "allowEmptyCatch": true
       }
-    ]
+    ],
+    "linebreak-style": "off"
   }
 }
